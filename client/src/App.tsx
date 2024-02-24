@@ -90,15 +90,13 @@ function App() {
   const [walletPubKey, updateWalletPublicKey] = useWalletPublicKey();
   const [OppWalletPubKey, updateOppWalletPublicKey] = useOppWalletPublicKey();
 
-  useEffect(() => {
-    const isPlayer1 = walletPubKey < OppWalletPubKey;
-    console.log(`isPlayer1: ${isPlayer1}`)
-    console.log(`walletPubKey: ${walletPubKey}`)
-    console.log(`OppWalletPubKey: ${OppWalletPubKey}`)
-    if (isPlayer1) {
-      createGameDataAccount({player1: walletPubKey, player2: OppWalletPubKey, programId: "Ew28tdaHCrcC2ZxAWncLyqBBhMTMJXuDYwpaZcJbKgK3"});
-    }
-  }, [walletPubKey, OppWalletPubKey])
+  // useEffect(() => {
+  //   const isPlayer1 = walletPubKey < OppWalletPubKey;
+  //   if (isPlayer1) {
+  //     createGameDataAccount({player1: walletPubKey, player2: OppWalletPubKey, programId: "Ew28tdaHCrcC2ZxAWncLyqBBhMTMJXuDYwpaZcJbKgK3"});
+  //   }
+
+  // }, [walletPubKey, OppWalletPubKey])
 
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
