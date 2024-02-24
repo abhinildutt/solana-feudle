@@ -188,6 +188,34 @@ function App() {
     setCurrentRowClass('')
   }
 
+  // Stopwatch
+  const [isStopwatchRunning, setIsStopwatchRunning] = useState(true)
+  const [timeMs, setTimeMs] = useState(0)
+
+  const isGameComplete = isGameWon || isGameLost
+  useEffect(() => {
+    setIsStopwatchRunning(/*guesses.length >= 1 &&*/ !isGameComplete)
+  }, [guesses, isGameComplete])
+
+  useEffect(() => {
+    const timeIncrementMs = 10
+    let interval: NodeJS.Timeout | null = null
+
+    if (isStopwatchRunning) {
+      interval = setInterval(() => {
+        setTimeMs((timeMs) => timeMs + timeIncrementMs)
+      }, timeIncrementMs)
+    } else if (interval !== null) {
+      clearInterval(interval)
+    }
+    return () => {
+      if (interval !== null) {
+        clearInterval(interval)
+      }
+    }
+  }, [isStopwatchRunning])
+  console.log(isStopwatchRunning)
+
   return (
     <div className="h-screen flex flex-col">
       <Navbar
@@ -201,6 +229,7 @@ function App() {
             className="flex justify-center w-full"
             style={{ marginLeft: '20vw' }}
           >
+            <StopwatchText timeMs={timeMs} show />
             <Grid
               solution={solution}
               guesses={guesses}
