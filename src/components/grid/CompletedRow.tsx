@@ -6,9 +6,10 @@ type Props = {
   solution: string
   guess: string
   isRevealing?: boolean
+  isOpponentGrid?: boolean
 }
 
-export const CompletedRow = ({ solution, guess, isRevealing }: Props) => {
+export const CompletedRow = ({ solution, guess, isRevealing, isOpponentGrid }: Props) => {
   const statuses = getGuessStatuses(solution, guess)
   const splitGuess = unicodeSplit(guess)
 
@@ -21,6 +22,7 @@ export const CompletedRow = ({ solution, guess, isRevealing }: Props) => {
           status={statuses[i]}
           position={i}
           isRevealing={isRevealing}
+          isOpponentGrid={isOpponentGrid}
           isCompleted
         />
       ))}

@@ -70,6 +70,7 @@ export const Grid2 = ({
           solution={solution}
           guess={guess}
           isRevealing={isRevealing && guesses.length - 1 === i}
+          isOpponentGrid
         />
       ))}
       {guesses.length < MAX_CHALLENGES && (
