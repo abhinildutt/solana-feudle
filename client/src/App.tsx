@@ -62,6 +62,8 @@ import { useWalletPublicKey } from './constants/Wallet'
 import { useOppWalletPublicKey } from './constants/OppWallet'
 import { Connection, PublicKey, clusterApiUrl, Transaction, SystemProgram, Keypair, TransactionInstruction } from '@solana/web3.js';
 
+import { createGameDataAccount } from './services/gameAccount'
+
 declare var window: any;
 
 
@@ -87,6 +89,16 @@ function App() {
   const [isGameLost, setIsGameLost] = useState(false)
   const [walletPubKey, updateWalletPublicKey] = useWalletPublicKey();
   const [OppWalletPubKey, updateOppWalletPublicKey] = useOppWalletPublicKey();
+
+  useEffect(() => {
+    const isPlayer1 = walletPubKey < OppWalletPubKey;
+    console.log(`isPlayer1: ${isPlayer1}`)
+    console.log(`walletPubKey: ${walletPubKey}`)
+    console.log(`OppWalletPubKey: ${OppWalletPubKey}`)
+    if (isPlayer1) {
+      createGameDataAccount({player1: walletPubKey, player2: OppWalletPubKey, programId: "Ew28tdaHCrcC2ZxAWncLyqBBhMTMJXuDYwpaZcJbKgK3"});
+    }
+  }, [walletPubKey, OppWalletPubKey])
 
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
@@ -196,11 +208,38 @@ function App() {
     setCurrentRowClass('')
   }
 
+  // Game over stats panel
+  const isGameComplete = isGameWon || isGameLost
+  useEffect(() => {
+    const delayMs = REVEAL_TIME_MS_NORMAL * solution.length
+    if (isGameWon) {
+      const winMessage =
+        WIN_MESSAGES[Math.floor(Math.random() * WIN_MESSAGES.length)]
+
+      showSuccessAlert(winMessage, {
+        delayMs,
+        onClose: () => setIsStatsModalOpen(true),
+      })
+    }
+
+    if (isGameLost) {
+      setTimeout(() => {
+        setIsStatsModalOpen(true)
+      }, (solution.length + 1) * REVEAL_TIME_MS_NORMAL)
+    }
+
+    if (isGameComplete) {
+      setTimeout(() => {
+        setIsSolutionTextOpen(true)
+      }, delayMs)
+    }
+  }, [isGameWon, isGameLost, showSuccessAlert])
+
+
   // Stopwatch
   const [isStopwatchRunning, setIsStopwatchRunning] = useState(true)
   const [timeMs, setTimeMs] = useState(0)
 
-  const isGameComplete = isGameWon || isGameLost
   useEffect(() => {
     setIsStopwatchRunning(/*guesses.length >= 1 &&*/ !isGameComplete)
   }, [guesses, isGameComplete])
@@ -222,7 +261,6 @@ function App() {
       }
     }
   }, [isStopwatchRunning])
-  console.log(isStopwatchRunning)
 
   return (
     <div className="h-screen flex flex-col">

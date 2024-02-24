@@ -33,15 +33,18 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
 
   useEffect(() => {
     if ('solana' in window) {
-      const solWindow = window as WindowWithSolana
+      // First assert window as unknown, then assert as WindowWithSolana
+      const solWindow = (window as unknown) as WindowWithSolana;
       if (solWindow?.solana?.isPhantom) {
-        setProvider(solWindow.solana)
-        setWalletAvail(true)
-        // Attemp an eager connection
-        solWindow.solana.connect({ onlyIfTrusted: true })
+        setProvider(solWindow.solana);
+        setWalletAvail(true);
+        // Attempt an eager connection
+        solWindow.solana.connect({ onlyIfTrusted: true }).catch((err) => {
+          console.error("Eager connection failed", err);
+        });
       }
     }
-  }, [])
+  }, []);  
 
   useEffect(() => {
     provider?.on('connect', (publicKey: PublicKey) => {
