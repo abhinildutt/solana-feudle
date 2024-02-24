@@ -60,6 +60,10 @@ import { StopwatchText } from './components/gametext/StopwatchText'
 import { PromoText } from './components/gametext/PromoText'
 import { useWalletPublicKey } from './constants/Wallet'
 import { useOppWalletPublicKey } from './constants/OppWallet'
+import { Connection, PublicKey, clusterApiUrl, Transaction, SystemProgram, Keypair, TransactionInstruction } from '@solana/web3.js';
+
+declare var window: any;
+
 
 function App() {
   const navigate = useNavigate()
@@ -147,7 +151,6 @@ function App() {
     ) {
       // const guessesIncludingCurrent = guesses.concat(currentGuess)
       // console.log("before", currentGuess, guesses)
-
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
 
