@@ -22,7 +22,7 @@ function VerticalStack(props: { children: boolean | ReactChild | ReactFragment |
   return (
     <div style={{
       display: 'flex',
-      justifyContent: 'center', // If you want the items centered
+      justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'column',
     }}>
@@ -31,11 +31,11 @@ function VerticalStack(props: { children: boolean | ReactChild | ReactFragment |
   );
 }
 
-export const InfoModal = ({ 
+export const GameOverModal = ({ 
   isOpen, 
   handleClose
 }: Props) => {
-  const abs_sol = 5
+  const abs_sol = 0.5
   const playerWon = true;
 
   return (

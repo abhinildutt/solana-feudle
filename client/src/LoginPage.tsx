@@ -4,6 +4,9 @@ import Connect2Phantom from './components/auth/Phantom'
 import { useNavigate } from 'react-router-dom'
 import Matchmaking from './Matchmaking'
 
+import { GameOverModal } from './components/modals/GameOverModal'
+import Keyboard from './Keyboard'
+
 const LoginPage: React.FC = () => {
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(false)
@@ -31,6 +34,12 @@ const LoginPage: React.FC = () => {
     <div className="login-page">
       <div className="login-container">
         <h1>Feudle</h1>
+        <Keyboard />
+        {/* <GameOverModal 
+          isOpen={true} 
+          handleClose={() => {}}
+        /> */}
+        <h2>Play Wordle with friends</h2>
         <button className="connect-wallet-btn" onClick={handleConnectWallet}>
           <Connect2Phantom onConnected={handleConnected} />{' '}
         </button>
