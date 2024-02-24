@@ -1,3 +1,12 @@
 html.dark {
   background-color: rgb(15, 23, 42);
 }
+.absolute-left {
+  position: absolute;
+  left: 15%;
+  top: 14%; /* Adjust if necessary */
+  transform: translateY(-50%); /* Centers the element vertically */
+  padding-left: 1rem; /* Give some space from the left edge */
+  z-index: 10; /* Ensure it's above other content */
+}
+

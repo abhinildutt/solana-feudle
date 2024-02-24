@@ -225,27 +225,27 @@ function App() {
       />
       <div className="pt-2 px-1 pb-8 md:max-w-7xl w-full mx-auto sm:px-6 lg:px-8 flex flex-col grow">
         <div className="pb-6 grow flex">
-          <div
-            className="flex justify-center w-full"
-            style={{ marginLeft: '20vw' }}
-          >
-            <StopwatchText timeMs={timeMs} show />
-            <Grid
-              solution={solution}
-              guesses={guesses}
-              currentGuess={currentGuess}
-              isRevealing={isRevealing}
-              currentRowClassName={currentRowClass}
+            <div className="absolute-left">
+                <StopwatchText timeMs={timeMs} show />
+            </div>
+            <div className="flex justify-center w-full" style={{ marginLeft: '17.5vw' }}>
+                <Grid
+                    solution={solution}
+                    guesses={guesses}
+                    currentGuess={currentGuess}
+                    isRevealing={isRevealing}
+                    currentRowClassName={currentRowClass}
+                />
+            </div>
+            <Grid2
+                solution={solution}
+                guesses={guesses}
+                currentGuess={currentGuess}
+                isRevealing={isRevealing}
+                currentRowClassName={currentRowClass}
             />
-          </div>
-          <Grid2
-            solution={solution}
-            guesses={guesses}
-            currentGuess={currentGuess}
-            isRevealing={isRevealing}
-            currentRowClassName={currentRowClass}
-          />
         </div>
+
         <Keyboard
           onChar={onChar}
           onDelete={onDelete}

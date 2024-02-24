@@ -4,7 +4,7 @@ type Props = {
 }
 
 const styles = {
-  fontSize: '18px',
+  fontSize: '40px',
 }
 
 const classes = "flex justify-center ml-2 mr-2 text-center dark:text-white"
