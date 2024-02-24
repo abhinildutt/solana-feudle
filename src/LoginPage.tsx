@@ -2,17 +2,24 @@ import React, { useState } from 'react'
 import './LoginPage.css' // Ensure you have this CSS file in the same directory
 import Connect2Phantom from './components/auth/Phantom'
 import { useNavigate } from 'react-router-dom'
+import Matchmaking from './Matchmaking'
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(false)
+  const [isMatchmaking, setIsMatchmaking] = useState(false); // New state to control matchmaking
 
   const handleConnected = (connected: boolean) => {
     setIsConnected(connected) // Update state based on wallet connection
   }
+
   const handlePlayGame = () => {
-    navigate('/main') // Navigate to the main page
-  }
+    setIsMatchmaking(true); // Start matchmaking on button click
+  };
+
+  const handleMatchFound = () => {
+    navigate('/main'); // Navigate to the game page once a match is found
+  };
 
   const handleConnectWallet = () => {
     // Placeholder for wallet connect functionality
@@ -26,13 +33,13 @@ const LoginPage: React.FC = () => {
         <h1>Feudle</h1>
         <button className="connect-wallet-btn" onClick={handleConnectWallet}>
           <Connect2Phantom onConnected={handleConnected} />{' '}
-          {/* Pass the callback */}
-          {isConnected && (
+        </button>
+        {isConnected && !isMatchmaking && (
             <button className="play-game-btn" onClick={handlePlayGame}>
               Play Game
             </button>
-          )}
-        </button>
+        )}
+        {isMatchmaking && <Matchmaking onMatchFound={handleMatchFound} />}
       </div>
     </div>
   )

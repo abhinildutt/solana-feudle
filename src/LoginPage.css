@@ -8,7 +8,7 @@
   
   .login-container {
     text-align: center;
-    max-width: 400px;
+    max-width: 600px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     border-radius: 8px;
@@ -35,3 +35,27 @@
     background-color: #45a049; /* Darker shade for hover effect */
   }
   
+  .play-game-btn {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 15px 32px; /* Padding for size */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Allow setting dimensions */
+    font-size: 16px; /* Text size */
+    margin: 4px 2px; /* Some space around the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth background color transition on hover */
+  }
+
+  .play-game-btn:hover {
+    background-color: #45a049; /* Darker shade of green on hover */
+  }
+  
+  .play-game-btn:disabled {
+    background-color: #cccccc; /* Gray background when disabled */
+    color: #666666; /* Dark gray text when disabled */
+    cursor: not-allowed; /* Show 'not-allowed' cursor when disabled */
+  }

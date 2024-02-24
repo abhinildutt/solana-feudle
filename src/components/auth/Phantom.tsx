@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
+import Matchmaking from '../../Matchmaking'
 
 type PhantomEvent = 'disconnect' | 'connect' | 'accountChanged'
 
@@ -75,6 +76,9 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
     if (connected) {
       onConnected(true) // Notify parent component when connected
     }
+    if (!connected) {
+      onConnected(false)
+    }
   }, [connected, onConnected])
 
   return (
@@ -82,21 +86,24 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
     {walletAvail ? (
       <div className="wallet-buttons">
         <div className="wallet-button">
-          <button disabled={connected} onClick={connectHandler}>
-            Connect to Phantom
-          </button>
-        </div>
-        <div className="wallet-button">
-          <button disabled={!connected} onClick={disconnectHandler}>
-            Disconnect from Phantom
-          </button>
+          {!connected ? (
+            <button disabled={connected} onClick={connectHandler}>
+              Connect to Phantom
+            </button>
+          ) : (
+            <button disabled={!connected} onClick={disconnectHandler}>
+              Disconnect from Phantom
+            </button>
+          )}
         </div>
         {connected && (
-          <div className="public-key-display">
-            <p>Your public key is: {pubKey?.toBase58()}</p>
+          <div className="public-key-container">
+            <div className="public-key-display">
+              <p>Your public key is: {pubKey?.toBase58()}</p>
+            </div>
           </div>
         )}
-      </div>
+    </div>
     ) : (
       <div className="phantom-not-available">
         <p>
