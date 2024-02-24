@@ -58,6 +58,8 @@ import { WORDS } from './constants/wordlist'
 import { RandomGameText } from './components/gametext/RandomGameText'
 import { StopwatchText } from './components/gametext/StopwatchText'
 import { PromoText } from './components/gametext/PromoText'
+import { useWalletPublicKey } from './constants/Wallet'
+import { useOppWalletPublicKey } from './constants/OppWallet'
 
 function App() {
   const navigate = useNavigate()
@@ -79,6 +81,9 @@ function App() {
   const [isSolutionTextOpen, setIsSolutionTextOpen] = useState(false)
   const [currentRowClass, setCurrentRowClass] = useState('')
   const [isGameLost, setIsGameLost] = useState(false)
+  const [walletPubKey, updateWalletPublicKey] = useWalletPublicKey();
+  const [OppWalletPubKey, updateOppWalletPublicKey] = useOppWalletPublicKey();
+
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
       ? localStorage.getItem('theme') === 'dark'

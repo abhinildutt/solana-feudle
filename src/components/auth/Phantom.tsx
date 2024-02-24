@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
 import Matchmaking from '../../Matchmaking'
+import { useWalletPublicKey } from '../../constants/Wallet'
 
 type PhantomEvent = 'disconnect' | 'connect' | 'accountChanged'
 
@@ -28,6 +29,7 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
   const [provider, setProvider] = useState<PhantomProvider | null>(null)
   const [connected, setConnected] = useState(false)
   const [pubKey, setPubKey] = useState<PublicKey | null>(null)
+  const [, updateWalletPublicKey] = useWalletPublicKey();
 
   useEffect(() => {
     if ('solana' in window) {
@@ -80,6 +82,10 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
       onConnected(false)
     }
   }, [connected, onConnected])
+
+  useEffect(() => {
+    updateWalletPublicKey(pubKey ? pubKey.toBase58() : "");
+  }, [pubKey, updateWalletPublicKey])
 
   return (
     <div className="wallet-connection">
