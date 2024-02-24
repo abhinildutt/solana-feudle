@@ -1,0 +1,30 @@
+.text {
+  color: #6b7280; /* text-gray-500 */
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftArrow {
+  height: 6vh;
+  width: 12vw;
+  transform: scaleX(-1);
+}
+
+.rightArrow {
+  height: 6vh;
+  width: 12vw;
+}
+
+.avatar {
+  height: 14vh;
+  width: 20vw;
+}
+
+.solanaIcon {
+  height: 12vh;
+  width: 8vw;
+}
