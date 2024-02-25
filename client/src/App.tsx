@@ -338,9 +338,9 @@ function App() {
   useEffect(() => {
     const isPlayer1 = walletPubKey < OppWalletPubKey;
     if(isPlayer1) {
+
       if(gameState.player2_guess != "inval") {
-        setCurrentGuess2(gameState.player2_guess)
-        setIsRevealing2(true)
+        setGuesses2([...guesses2, gameState.player2_guess])
       }
 
     }
