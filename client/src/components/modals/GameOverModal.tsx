@@ -12,10 +12,11 @@ import Avatar from '@mui/material/Avatar';
 type Props = {
   isOpen: boolean
   handleClose: () => void
+  playerWon: boolean
 }
 
 const get_player = () => {
-  return 'scdivad';
+  return 'Roger';
 }
 
 function VerticalStack(props: { children: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }) {
@@ -33,10 +34,10 @@ function VerticalStack(props: { children: boolean | ReactChild | ReactFragment |
 
 export const GameOverModal = ({ 
   isOpen, 
-  handleClose
+  handleClose,
+  playerWon
 }: Props) => {
-  const abs_sol = 0.5
-  const playerWon = true;
+  const abs_sol = 0.005
 
   return (
     <BaseModal title={`${get_player()} wins!`} isOpen={isOpen} handleClose={handleClose} isWide={true}>

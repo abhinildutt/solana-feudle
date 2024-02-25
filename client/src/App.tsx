@@ -75,7 +75,7 @@ const SOCKET_SERVER_URL = "https://solana-feudle.onrender.com";
 function App() {
   const navigate = useNavigate()
 
-  const solution = 'CHORE'
+  const solution = 'SLASH'
 
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
@@ -425,6 +425,7 @@ function App() {
         <GameOverModal
           isOpen={isStatsModalOpen}
           handleClose={() => setIsStatsModalOpen(false)}
+          playerWon={isGameWon}
         />
         {/* <StatsModal
           isOpen={isStatsModalOpen}
