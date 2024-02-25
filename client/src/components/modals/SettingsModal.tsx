@@ -40,12 +40,6 @@ export const SettingsModal = ({
     <BaseModal title="Settings" isOpen={isOpen} handleClose={handleClose}>
       <div className="flex flex-col mt-2 divide-y">
         <SettingsToggle
-          settingName="Hard Mode"
-          flag={isHardMode}
-          handleFlag={handleHardMode}
-          description={HARD_MODE_DESCRIPTION}
-        />
-        <SettingsToggle
           settingName="Dark Mode"
           flag={isDarkMode}
           handleFlag={handleDarkMode}
@@ -55,18 +49,6 @@ export const SettingsModal = ({
           flag={isHighContrastMode}
           handleFlag={handleHighContrastMode}
           description={HIGH_CONTRAST_MODE_DESCRIPTION}
-        />
-        <SettingsToggle
-          settingName="Speedrun Mode"
-          flag={isSpeedrunMode}
-          handleFlag={handleSpeedrunMode}
-          description={SPEEDRUN_MODE_DESCRIPTION}
-        />
-        <SettingsToggle
-          settingName="Manual Share Text"
-          flag={isManualShareText}
-          handleFlag={handleManualShareText}
-          description={MANUAL_SHARE_TEXT_DESCRIPTION}
         />
       </div>
     </BaseModal>

@@ -451,21 +451,22 @@ function App() {
           isOpen={isMigrateStatsModalOpen}
           handleClose={() => setIsMigrateStatsModalOpen(false)}
         />
+         */}
         <SettingsModal
           isOpen={isSettingsModalOpen}
           handleClose={() => setIsSettingsModalOpen(false)}
-          isHardMode={isHardMode}
-          handleHardMode={handleHardMode}
+          isHardMode={false}
+          handleHardMode={() => { }}
           isDarkMode={isDarkMode}
           handleDarkMode={handleDarkMode}
           isHighContrastMode={isHighContrastMode}
           handleHighContrastMode={handleHighContrastMode}
-          isSpeedrunMode={isSpeedrunMode}
-          handleSpeedrunMode={handleSpeedrunMode}
-          isManualShareText={isManualShareText}
-          handleManualShareText={handleManualShareText}
+          isSpeedrunMode={false}
+          handleSpeedrunMode={() => { }}
+          isManualShareText={false}
+          handleManualShareText={() => {}}
         />
-        <AlertContainer /> */}
+        <AlertContainer />
       </div>
     </div>
   )
