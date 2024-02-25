@@ -144,12 +144,11 @@ function App() {
       socket.on('receiveGameDataAccount', (data) => {
         console.log('Received gameDataAccount from Client 1:', data.gameDataAccount);
       
-        setGameDataAccount(data.sendGameDataAccount);
+        setGameDataAccount(data.gameDataAccount);
         // Now you can use the received gameDataAccount for game initialization or other logic
       });
       // Clean up on component unmount
       return () => {
-        console.log("UES")
         socket.off('receiveGameDataAccount');
         socket.disconnect();
       };
@@ -337,6 +336,17 @@ function App() {
       }
     }
   }, [isStopwatchRunning])
+
+  useEffect(() => {
+    const isPlayer1 = walletPubKey < OppWalletPubKey;
+    if(isPlayer1) {
+
+      if(gameState.player2_guess != "inval") {
+        setGuesses2([...guesses2, gameState.player2_guess])
+      }
+
+    }
+  }, [gameState])
 
   return (
     <div className="h-screen flex flex-col">
