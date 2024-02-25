@@ -35,7 +35,7 @@ export const GameOverModal = ({
   isOpen, 
   handleClose
 }: Props) => {
-  const abs_sol = 5
+  const abs_sol = 0.5
   const playerWon = true;
 
   return (

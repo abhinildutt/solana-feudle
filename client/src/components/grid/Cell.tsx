@@ -10,6 +10,7 @@ type Props = {
   isCompleted?: boolean
   position?: number
   isOpponentGrid?: boolean
+  isBig?: boolean
 }
 
 export const Cell = ({
@@ -18,7 +19,8 @@ export const Cell = ({
   isRevealing,
   isCompleted,
   position = 0,
-  isOpponentGrid = false
+  isOpponentGrid = false,
+  isBig = false
 }: Props) => {
   const isFilled = value && !isCompleted
   const shouldReveal = isRevealing && isCompleted
@@ -29,7 +31,7 @@ export const Cell = ({
   }
 
   const classes = classnames(
-    'w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-4xl font-bold rounded dark:text-white',
+    (isBig ? 'w-32 h-32 border-solid border-2 flex items-center justify-center mx-0.5 text-8xl font-bold rounded dark:text-white' : 'w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-4xl font-bold rounded dark:text-white'),
     {
       'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-600':
         !status,
