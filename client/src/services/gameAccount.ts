@@ -12,22 +12,21 @@ export async function createGameDataAccount({
     player1,
     player2,
     programId,
+    onCreate, // Added onCreate callback in the function parameters
 }: {
     player1: string;
     player2: string;
     programId: string;
+    onCreate: (gameDataAccountPubkey: string) => void; // Define the expected type of onCreate callback
 }): Promise<string> {
-    const connection = new Connection(clusterApiUrl('testnet'), 'confirmed');
-
-    // Generate a new burner wallet (keypair)
+    const connection = new Connection('http://127.0.0.1:8899', "confirmed");
     const burnerWallet = Keypair.generate();
 
-    // For test purposes, you might need to airdrop some SOL to the burner wallet
+    // Airdrop SOL to the burner wallet for account creation fees
     const airdropSignature = await connection.requestAirdrop(
         burnerWallet.publicKey,
-        LAMPORTS_PER_SOL // Airdrop 1 SOL (adjust as needed for account creation fees)
+        LAMPORTS_PER_SOL // Adjust the amount of SOL airdropped as needed
     );
-    // Confirm the airdrop transaction
     await connection.confirmTransaction(airdropSignature, 'confirmed');
 
     const player1PublicKey = new PublicKey(player1);
@@ -36,7 +35,7 @@ export async function createGameDataAccount({
 
     const GAME_ACCOUNT_SECRET = `${player1.substring(0, 5)}${player2.substring(0, 5)}`;
     const gameDataAccountPubkey = await PublicKey.createWithSeed(
-        burnerWallet.publicKey, // Use the burner wallet's public key
+        burnerWallet.publicKey,
         GAME_ACCOUNT_SECRET,
         programPublicKey,
     );
@@ -44,7 +43,7 @@ export async function createGameDataAccount({
     let gameDataAccount = await connection.getAccountInfo(gameDataAccountPubkey);
 
     if (gameDataAccount === null) {
-        const GAME_DATA_SIZE = 500; // Set the appropriate size for your game data account
+        const GAME_DATA_SIZE = 500; // Appropriate size for your game data account
         const lamports = await connection.getMinimumBalanceForRentExemption(GAME_DATA_SIZE);
 
         const transaction = new Transaction().add(
@@ -59,19 +58,17 @@ export async function createGameDataAccount({
             }),
         );
 
-        // Set the recentBlockhash
         const { blockhash } = await connection.getLatestBlockhash();
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = burnerWallet.publicKey;
-
-        // Sign the transaction with the burner wallet's private key
-        transaction.sign(burnerWallet);
+        transaction.sign(burnerWallet); // Sign the transaction with the burner wallet
 
         // Send the transaction
         const signature = await connection.sendRawTransaction(transaction.serialize());
         await connection.confirmTransaction(signature, 'confirmed');
 
         console.log(`Game data account public key: ${gameDataAccountPubkey.toBase58()}`);
+        onCreate(gameDataAccountPubkey.toBase58()); // Invoke the onCreate callback with the public key of the created account
     }
 
     return gameDataAccountPubkey.toBase58();

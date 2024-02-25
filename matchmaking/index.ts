@@ -4,7 +4,7 @@ import http from "http";
 const server = http.createServer();
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3001", 
+    origin: "*", 
   },
 });
 
@@ -44,6 +44,11 @@ io.on("connection", (socket) => {
       }
     }
 
+  });
+
+  socket.on('sendGameDataAccount', (data) => {
+    // Emit to all clients except the sender
+    socket.broadcast.emit('receiveGameDataAccount', data);
   });
 
   socket.on("disconnect", () => {

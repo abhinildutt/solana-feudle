@@ -63,9 +63,12 @@ import { useOppWalletPublicKey } from './constants/OppWallet'
 import { Connection, PublicKey, clusterApiUrl, Transaction, SystemProgram, Keypair, TransactionInstruction } from '@solana/web3.js';
 
 import { createGameDataAccount } from './services/gameAccount'
+import { initializeGame, fetchGameState, sendGuess, subscribeToGameStateChanges, SOLANA_NETWORK, GameState } from './services/solanaService'
+import io from 'socket.io-client';
 
 declare var window: any;
 
+const SOCKET_SERVER_URL = "http://localhost:8000";
 
 function App() {
   const navigate = useNavigate()
@@ -79,24 +82,87 @@ function App() {
   const { showError: showErrorAlert, showSuccess: showSuccessAlert } =
     useAlert()
   const [currentGuess, setCurrentGuess] = useState('')
+  const [currentGuess2, setCurrentGuess2] = useState('')
+
   const [isGameWon, setIsGameWon] = useState(false)
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isMigrateStatsModalOpen, setIsMigrateStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [isSolutionTextOpen, setIsSolutionTextOpen] = useState(false)
+
   const [currentRowClass, setCurrentRowClass] = useState('')
+  const [currentRowClass2, setCurrentRowClass2] = useState('')
+
   const [isGameLost, setIsGameLost] = useState(false)
   const [walletPubKey, updateWalletPublicKey] = useWalletPublicKey();
   const [OppWalletPubKey, updateOppWalletPublicKey] = useOppWalletPublicKey();
+  const PROGRAM_ID = "yUyg4pKYPrh7KdcWSMygA3bj1REKeswbE7NYoVxU2W8";
+  const [gameDataAccount, setGameDataAccount] = useState('');
+  const [gameState, setGameState] = useState<GameState>(new GameState());
 
-  // useEffect(() => {
-  //   const isPlayer1 = walletPubKey < OppWalletPubKey;
-  //   if (isPlayer1) {
-  //     createGameDataAccount({player1: walletPubKey, player2: OppWalletPubKey, programId: "Ew28tdaHCrcC2ZxAWncLyqBBhMTMJXuDYwpaZcJbKgK3"});
-  //   }
+  // Initialize subscription
+  // subscribeToGameStateChanges(gameDataAccount);
+  useEffect(() => {
+        let subscriptionId: number | null = null;
+        const connection = new Connection(SOLANA_NETWORK, "confirmed");
 
-  // }, [walletPubKey, OppWalletPubKey])
+        const subscribe = async () => {
+            // Define the callback function inside useEffect to access fetchGameState and setGameState
+            const callback = async (accountInfo: any, context: any) => {
+                const updatedGameState = await fetchGameState(gameDataAccount);
+                if(updatedGameState) setGameState(updatedGameState);
+            };
+
+            // Subscribe to account changes
+            subscriptionId = connection.onAccountChange(new PublicKey(gameDataAccount), callback, 'confirmed');
+        };
+
+        subscribe();
+
+        // Cleanup function to unsubscribe
+        return () => {
+            if (subscriptionId) {
+                connection.removeAccountChangeListener(subscriptionId);
+            }
+        };
+    }, [gameDataAccount]); // Depend on gameKey to re-subscribe if it changes
+ 
+  useEffect(() => {
+    const isPlayer1 = walletPubKey < OppWalletPubKey;
+    if (isPlayer1) {
+      createGameDataAccount({player1: walletPubKey, player2: OppWalletPubKey, programId: PROGRAM_ID, onCreate : setGameDataAccount});
+    }
+  }, [walletPubKey, OppWalletPubKey])
+
+  useEffect(() => {
+    const isPlayer1 = walletPubKey < OppWalletPubKey;
+    if (!isPlayer1) {
+      const socket = io(SOCKET_SERVER_URL);
+      socket.on('receiveGameDataAccount', (data) => {
+        console.log('Received gameDataAccount from Client 1:', data.gameDataAccount);
+      
+        setGameDataAccount(data.sendGameDataAccount);
+        // Now you can use the received gameDataAccount for game initialization or other logic
+      });
+      // Clean up on component unmount
+      return () => {
+        console.log("UES")
+        socket.off('receiveGameDataAccount');
+        socket.disconnect();
+      };
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log("Changed game pub key : ", gameDataAccount)
+    const isPlayer1 = walletPubKey < OppWalletPubKey;
+    if (isPlayer1) {
+      const socket = io(SOCKET_SERVER_URL);
+      socket.emit('sendGameDataAccount', { gameDataAccount });
+      initializeGame(gameDataAccount, PROGRAM_ID, walletPubKey, OppWalletPubKey)
+    }
+  }, [gameDataAccount])
 
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
@@ -111,8 +177,13 @@ function App() {
 
   // GRID
   const [isRevealing, setIsRevealing] = useState(false)
+  const [isRevealing2, setIsRevealing2] = useState(true)
+
   const [stats, setStats] = useState(() => loadStats())
+
   const [guesses, setGuesses] = useState<string[]>([])
+  const [guesses2, setGuesses2] = useState<string[]>([])
+
 
   // KEYBOARD
   const onChar = (value: string) => {
@@ -159,8 +230,13 @@ function App() {
       guesses.length < MAX_CHALLENGES &&
       !isGameWon
     ) {
-      // const guessesIncludingCurrent = guesses.concat(currentGuess)
-      // console.log("before", currentGuess, guesses)
+
+      console.log("pub key : ", gameDataAccount)
+      const isPlayer1 = walletPubKey < OppWalletPubKey;
+      if (isPlayer1) {
+        sendGuess(gameDataAccount, PROGRAM_ID, currentGuess, 1, walletPubKey, OppWalletPubKey)
+      }
+      else sendGuess(gameDataAccount, PROGRAM_ID, currentGuess, 2, walletPubKey, OppWalletPubKey)
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
 
@@ -283,10 +359,10 @@ function App() {
             </div>
             <Grid2
                 solution={solution}
-                guesses={guesses}
-                currentGuess={currentGuess}
-                isRevealing={isRevealing}
-                currentRowClassName={currentRowClass}
+                guesses={guesses2}
+                currentGuess={currentGuess2}
+                isRevealing={isRevealing2}
+                currentRowClassName={currentRowClass2}
             />
         </div>
 
