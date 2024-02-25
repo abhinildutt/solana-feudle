@@ -102,6 +102,8 @@ function App() {
   const PROGRAM_ID = "yUyg4pKYPrh7KdcWSMygA3bj1REKeswbE7NYoVxU2W8";
   const [gameDataAccount, setGameDataAccount] = useState('');
   const [gameState, setGameState] = useState<GameState>(new GameState());
+  const [isGameWonByOpponent, setIsGameWonByOpponent] = useState(false);
+  const [isGameLostByOpponent, setIsGameLostByOpponent] = useState(false);
 
   // Initialize subscription
   // subscribeToGameStateChanges(gameDataAccount);
@@ -283,6 +285,20 @@ function App() {
     setCurrentRowClass('')
   }
 
+  useEffect(() => {
+    let guesses2_ = guesses2
+    if (guesses2_[0] === '') {
+      guesses2_ = guesses2_.slice(1)
+    }
+    if (guesses2_.length >= 1 && guesses2_[guesses2_.length - 1] === solution) {
+      setIsGameLostByOpponent(true)
+      setIsGameLost(true)
+    } else if (guesses2_.length === MAX_CHALLENGES) {
+      setIsGameWonByOpponent(true)
+      setIsGameWon(true)
+    }
+  }, [guesses2])
+
   // Game over stats panel
   const isGameComplete = isGameWon || isGameLost
   useEffect(() => {
@@ -340,10 +356,10 @@ function App() {
   useEffect(() => {
     const isPlayer1 = walletPubKey < OppWalletPubKey;
     if(isPlayer1) {
-      if (gameState.game_status == 2) {
-        setIsGameWon(false)
-        setIsGameLost(true)
-      }
+      // if (gameState.game_status == 2) {
+      //   setIsGameWon(false)
+      //   setIsGameLost(true)
+      // }
 
       if(gameState.player2_guess != "inval") {
         setGuesses2([...guesses2, gameState.player2_guess])
@@ -351,10 +367,10 @@ function App() {
 
     }
     if (!isPlayer1) {
-      if (gameState.game_status == 1) {
-        setIsGameWon(false)
-        setIsGameLost(true)
-      }
+      // if (gameState.game_status == 1) {
+      //   setIsGameWon(false)
+      //   setIsGameLost(true)
+      // }
 
       if(gameState.player1_guess != "inval") {
         setGuesses2([...guesses2, gameState.player1_guess])
