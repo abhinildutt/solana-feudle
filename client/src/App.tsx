@@ -346,6 +346,13 @@ function App() {
       }
 
     }
+    if(!isPlayer1) {
+
+      if(gameState.player1_guess != "inval") {
+        setGuesses2([...guesses2, gameState.player1_guess])
+      }
+
+    }
   }, [gameState])
 
   return (

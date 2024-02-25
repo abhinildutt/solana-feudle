@@ -57,9 +57,9 @@ export const Grid2 = ({
   isRevealing,
   currentRowClassName,
 }: Props) => {
-  const empties =
-    guesses.length < MAX_CHALLENGES - 1
-      ? Array.from(Array(MAX_CHALLENGES - 1 - guesses.length))
+  let empties =
+    guesses.length < MAX_CHALLENGES
+      ? Array.from(Array(MAX_CHALLENGES - guesses.length))
       : []
 
   return (
