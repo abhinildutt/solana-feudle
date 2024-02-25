@@ -340,13 +340,21 @@ function App() {
   useEffect(() => {
     const isPlayer1 = walletPubKey < OppWalletPubKey;
     if(isPlayer1) {
+      if (gameState.game_status == 2) {
+        setIsGameWon(false)
+        setIsGameLost(true)
+      }
 
       if(gameState.player2_guess != "inval") {
         setGuesses2([...guesses2, gameState.player2_guess])
       }
 
     }
-    if(!isPlayer1) {
+    if (!isPlayer1) {
+      if (gameState.game_status == 1) {
+        setIsGameWon(false)
+        setIsGameLost(true)
+      }
 
       if(gameState.player1_guess != "inval") {
         setGuesses2([...guesses2, gameState.player1_guess])
