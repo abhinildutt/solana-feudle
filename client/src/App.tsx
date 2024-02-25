@@ -70,7 +70,7 @@ import { GameOverModal } from './components/modals/GameOverModal'
 
 declare var window: any;
 
-const SOCKET_SERVER_URL = "http://localhost:8000";
+const SOCKET_SERVER_URL = "https://solana-feudle.onrender.com";
 
 function App() {
   const navigate = useNavigate()

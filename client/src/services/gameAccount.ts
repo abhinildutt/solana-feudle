@@ -29,6 +29,9 @@ export async function createGameDataAccount({
     );
     await connection.confirmTransaction(airdropSignature, 'confirmed');
 
+    const airdropStatus = await connection.getSignatureStatus(airdropSignature);
+    console.log("Airdrop status:", airdropStatus)
+
     const player1PublicKey = new PublicKey(player1);
     const player2PublicKey = new PublicKey(player2);
     const programPublicKey = new PublicKey(programId);

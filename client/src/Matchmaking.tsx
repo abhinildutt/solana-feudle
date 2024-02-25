@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { useWalletPublicKey } from './constants/Wallet';
 import { useOppWalletPublicKey } from './constants/OppWallet';
 
-const SOCKET_SERVER_URL = "http://localhost:8000";
+const SOCKET_SERVER_URL = "https://solana-feudle.onrender.com";
 
 interface MatchmakingProps {
     onMatchFound: () => void;

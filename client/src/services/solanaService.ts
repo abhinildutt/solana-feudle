@@ -25,6 +25,7 @@ export const sendGuess = async (
   player1Pubkey: string,
   player2Pubkey: string
 ) => {
+  console.log("game state pubkey : ", gameStateAccountPubkey);
   const connection = new Connection(SOLANA_NETWORK, "confirmed");
   const programPublicKey = new PublicKey(programId);
   const gameStatePublicKey = new PublicKey(gameStateAccountPubkey);
