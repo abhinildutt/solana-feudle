@@ -31,7 +31,7 @@ function VerticalStack(props: { children: boolean | ReactChild | ReactFragment |
   );
 }
 
-export const InfoModal = ({ 
+export const GameOverModal = ({ 
   isOpen, 
   handleClose
 }: Props) => {

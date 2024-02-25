@@ -18,43 +18,43 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell
           isRevealing={true}
           isCompleted={true}
-          value="W"
+          value="S"
           status="correct"
         />
-        <Cell value="E" />
+        <Cell value="O" />
+        <Cell value="L" />
         <Cell value="A" />
         <Cell value="R" />
-        <Cell value="Y" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter W is in the word and in the correct spot.
+        The letter S is in the word and in the correct spot.
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell value="P" />
+        <Cell value="B" />
         <Cell
           isRevealing={true}
           isCompleted={true}
-          value="I"
+          value="L"
           status="present"
         />
-        <Cell value="L" />
-        <Cell value="L" />
-        <Cell value="S" />
+        <Cell value="O" />
+        <Cell value="C" />
+        <Cell value="K" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter I is in the word but in the wrong spot.
+        The letter L is in the word but in the wrong spot.
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell value="V" />
+        <Cell value="C" />
+        <Cell value="H" />
         <Cell value="A" />
-        <Cell value="G" />
-        <Cell isRevealing={true} isCompleted={true} value="U" status="absent" />
-        <Cell value="E" />
+        <Cell isRevealing={true} isCompleted={true} value="I" status="absent" />
+        <Cell value="N" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter U is not in the word in any spot.
+        The letter I is not in the word in any spot.
       </p>
     </BaseModal>
   )

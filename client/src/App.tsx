@@ -66,6 +66,8 @@ import { createGameDataAccount } from './services/gameAccount'
 import { initializeGame, fetchGameState, sendGuess, subscribeToGameStateChanges, SOLANA_NETWORK, GameState } from './services/solanaService'
 import io from 'socket.io-client';
 
+import { GameOverModal } from './components/modals/GameOverModal'
+
 declare var window: any;
 
 const SOCKET_SERVER_URL = "http://localhost:8000";
@@ -285,7 +287,7 @@ function App() {
   // Game over stats panel
   const isGameComplete = isGameWon || isGameLost
   useEffect(() => {
-    const delayMs = REVEAL_TIME_MS_NORMAL * solution.length
+    const delayMs = REVEAL_TIME_MS_NORMAL * solution.length - 1337
     if (isGameWon) {
       const winMessage =
         WIN_MESSAGES[Math.floor(Math.random() * WIN_MESSAGES.length)]
@@ -377,6 +379,10 @@ function App() {
         <InfoModal
           isOpen={isInfoModalOpen}
           handleClose={() => setIsInfoModalOpen(false)}
+        />
+        <GameOverModal
+          isOpen={isStatsModalOpen}
+          handleClose={() => setIsStatsModalOpen(false)}
         />
         {/* <StatsModal
           isOpen={isStatsModalOpen}
