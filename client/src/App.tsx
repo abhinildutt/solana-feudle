@@ -37,6 +37,9 @@ import {
   saveGameOfDayStateToLocalStorage,
   setStoredIsHighContrastMode,
   getStoredIsHighContrastMode,
+  GameStats,
+  loadStatsFromLocalStorage,
+  saveStatsToLocalStorage,
 } from './lib/localStorage'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
@@ -287,15 +290,37 @@ function App() {
 
   useEffect(() => {
     let guesses2_ = guesses2
+    let gameStats : GameStats| null = loadStatsFromLocalStorage()
+    if (!gameStats) {
+      gameStats = {
+        winDistribution: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Assuming you want an array of 10 elements for demonstration
+        gamesFailed: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        totalGames: 0,
+        successRate: 0
+      };
+      
+    }
     if (guesses2_[0] === '') {
       guesses2_ = guesses2_.slice(1)
     }
     if (guesses2_.length >= 1 && guesses2_[guesses2_.length - 1] === solution) {
       setIsGameLostByOpponent(true)
       setIsGameLost(true)
+      gameStats.gamesFailed += 1
+      gameStats.totalGames += 1
+      gameStats.successRate = (gameStats.totalGames - gameStats.gamesFailed) / gameStats.totalGames 
+      saveStatsToLocalStorage(gameStats)
+
     } else if (guesses2_.length === MAX_CHALLENGES) {
       setIsGameWonByOpponent(true)
       setIsGameWon(true)
+      gameStats.gamesFailed = Math.max(gameStats.gamesFailed - 1, 0)
+      gameStats.totalGames = Math.max(gameStats.totalGames - 1, 0)
+      if(gameStats.totalGames != 0) gameStats.successRate = (gameStats.totalGames - gameStats.gamesFailed) / gameStats.totalGames 
+      saveStatsToLocalStorage(gameStats)
+
     }
   }, [guesses2])
 
@@ -423,15 +448,17 @@ function App() {
           handleClose={() => setIsInfoModalOpen(false)}
         />
         <GameOverModal
-          isOpen={isStatsModalOpen}
-          handleClose={() => setIsStatsModalOpen(false)}
+          isOpen={isGameLost || isGameWon}
+          handleClose={() => {
+            setIsStatsModalOpen(false)
+          }}
           playerWon={isGameWon}
         />
-        {/* <StatsModal
+        {<StatsModal
           isOpen={isStatsModalOpen}
           handleClose={() => setIsStatsModalOpen(false)}
           solution={solution}
-          solutionIndex={solutionIndex}
+          solutionIndex={0}
           guesses={guesses}
           gameStats={stats}
           isGameLost={isGameLost}
@@ -441,19 +468,15 @@ function App() {
             setIsStatsModalOpen(false)
             setIsMigrateStatsModalOpen(true)
           }}
-          isHardMode={isHardMode}
+          isHardMode={false}
           isDarkMode={isDarkMode}
           isHighContrastMode={isHighContrastMode}
           numberOfGuessesMade={guesses.length}
-          isPlayingExample={isPlayingExample}
-          isPlayingRandom={isPlayingRandom}
-          isManualShareText={isManualShareText}
+          isPlayingExample={false}
+          isPlayingRandom={false}
+          isManualShareText={false}
         />
-        <MigrateStatsModal
-          isOpen={isMigrateStatsModalOpen}
-          handleClose={() => setIsMigrateStatsModalOpen(false)}
-        />
-         */}
+        }
         <SettingsModal
           isOpen={isSettingsModalOpen}
           handleClose={() => setIsSettingsModalOpen(false)}
