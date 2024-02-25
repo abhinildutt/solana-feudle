@@ -31,6 +31,8 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
   const [pubKey, setPubKey] = useState<PublicKey | null>(null)
   const [, updateWalletPublicKey] = useWalletPublicKey();
 
+  const [showCopied, setShowCopied] = useState(false);
+
   useEffect(() => {
     if ('solana' in window) {
       const solWindow = window as WindowWithSolana
@@ -88,24 +90,70 @@ const Connect2Phantom: FC<Connect2PhantomProps> = ({onConnected}) => {
   }, [pubKey, updateWalletPublicKey])
 
   return (
-    <div className="wallet-connection">
+    <div>
     {walletAvail ? (
-      <div className="wallet-buttons">
-        <div className="wallet-button">
+      <div>
+        <div>
           {!connected ? (
             <button disabled={connected} onClick={connectHandler}>
-              Connect to Phantom
+              <p
+                style={{
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  fontFamily: 'monospace',
+                }}
+              > CONNECT TO PHANTOM</p>
             </button>
           ) : (
             <button disabled={!connected} onClick={disconnectHandler}>
-              Disconnect from Phantom
+              <p
+                style={{
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  fontFamily: 'monospace',
+                }}
+              >DISCONNECT FROM PHANTOM</p>
             </button>
           )}
         </div>
+
         {connected && (
           <div className="public-key-container">
-            <div className="public-key-display">
-              <p>Your public key is: {pubKey?.toBase58()}</p>
+            <div className="public-key-display"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginTop: '5rem',
+              }}
+            >
+              <p
+                style={{
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  fontFamily: 'monospace',
+                }}
+                onClick={() => {
+                  navigator.clipboard.writeText(pubKey?.toBase58() || '').then(() => {
+                    setShowCopied(true);
+                    setTimeout(() => setShowCopied(false), 2000);
+                  })
+                  .catch(err => {
+                    console.error('Error copying to clipboard: ', err);
+                  });
+                }}
+              >Click to copy your public key</p>
+              <p
+                style={{
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                  color: 'green',
+                  visibility: showCopied ? 'visible' : 'hidden',
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  fontFamily: 'monospace',
+                }}
+              >Copied!</p>
             </div>
           </div>
         )}

@@ -32,20 +32,33 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-page">
+      <Keyboard />
       <div className="login-container">
-        <h1>Feudle</h1>
-        <Keyboard />
+        <h1
+          style={{
+            fontSize: '5rem',
+            fontWeight: 'bold',
+            marginTop: '-5rem'
+          }}
+        >FEUDLE</h1>
+        <h1
+          style={{
+            fontSize: '2rem',
+            marginBottom: '1.5rem',
+            fontWeight: 'bold'
+          }}
+        >on Solana Blockchain</h1>
+
         {/* <GameOverModal 
           isOpen={true} 
           handleClose={() => {}}
         /> */}
-        <h2>Play Wordle with friends</h2>
         <button className="connect-wallet-btn" onClick={handleConnectWallet}>
           <Connect2Phantom onConnected={handleConnected} />{' '}
         </button>
         {isConnected && !isMatchmaking && (
             <button className="play-game-btn" onClick={handlePlayGame}>
-              Play Game
+              PLAY GAME
             </button>
         )}
         {isMatchmaking && <Matchmaking onMatchFound={handleMatchFound} />}

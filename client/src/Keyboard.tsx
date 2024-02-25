@@ -9,7 +9,7 @@ const Key = (props: { shouldShow: boolean; letter: string; key_status: CharStatu
     <div
       style={{
         // visibility: shouldShow ? 'visible' : 'hidden',
-        opacity: shouldShow ? 1 : 0.2,
+        opacity: shouldShow ? 1 : 0.7,
       }}
       key={letter}
       className={`key ${shouldShow ? 'pressed' : ''}`}
@@ -27,20 +27,25 @@ const Keyboard = () => {
   // State to track pressed keys
   const [pressedKeys, setPressedKeys] = useState({});
 
-  const CODE_WORD = 'play';
-  const [lastKeys, setLastKeys] = useState<string[]>([]);
+  const [wasIpressed, setWasIpressed] = useState(false);
+
+  // const CODE_WORD = 'play';
+  // const [lastKeys, setLastKeys] = useState<string[]>([]);
 
   useEffect(() => {
     // Function to update state when a key is pressed
     const handleKeyDown = (event: { key: string; }) => {
       setPressedKeys((prevKeys) => ({ ...prevKeys, [event.key.toUpperCase()]: true }));
-      setLastKeys((prevKeys: string[]) => {
-        if (CODE_WORD.startsWith(prevKeys.join('') + (event.key))) {
-          return [...prevKeys, event.key]
-        } else {
-          return [];
-        }
-      });
+      if (event.key.toUpperCase() === 'I') {
+        setWasIpressed((prev) => !prev);
+      }
+      // setLastKeys((prevKeys: string[]) => {
+      //   if (CODE_WORD.startsWith(prevKeys.join('') + (event.key))) {
+      //     return [...prevKeys, event.key]
+      //   } else {
+      //     return [];
+      //   }
+      // });
       
       // if (CODE_WORD[lastKeys.length] === event.key) {
       //   setLastKeys((prevKeys: string[]) => [...prevKeys, event.key]);
@@ -70,34 +75,40 @@ const Keyboard = () => {
     const status = ['correct', 'present', 'absent', 'vsdkufghahf'];
     return status[Math.floor(Math.random() * status.length)] as CharStatus;
   }
-  // Keyboard layout (simplified)
-  const keys = [
-    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
-    'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
-    'Z', 'X', 'C', 'V', 'B', 'N', 'M',
-  ];
   return (
     <div className="keyboard">
       {/* <div>{lastKeys.length == CODE_WORD.length ? 'UNLOCKED' : 'LOCKED'}</div> */}
       {/* First row: Q to P */}
       <div className="keyboard-row">
         {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((key) => (
-          <Key shouldShow={
-            pressedKeys[key as keyof typeof pressedKeys]
-          } 
-          letter={key} 
-          key_status={get_key_status(key)}
-          />
+          (key === 'I' && wasIpressed) ? (
+            <img 
+              src="https://brand.illinois.edu/wp-content/uploads/2024/02/Block-I-orange-blue-background.png" 
+              style={{
+                width: '15vw',
+                height: '15vh',
+                padding: '2px',
+                boxShadow: '0 0 10px 5px #f3f3f3',
+                // border: '1px solid #f3f3f3',
+                margin: '2px',
+              }}
+            />
+          ) :
+          (<Key 
+            shouldShow={pressedKeys[key as keyof typeof pressedKeys]} 
+            letter={key} 
+            key_status={get_key_status(key)}
+          />)
         ))}
       </div>
       
       {/* Second row: A to L */}
       <div className="keyboard-row">
         {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
-          <Key shouldShow={
-            pressedKeys[key as keyof typeof pressedKeys] || lastKeys.includes(key)
-          } letter={key} 
-          key_status={get_key_status(key)}
+          <Key 
+            shouldShow={pressedKeys[key as keyof typeof pressedKeys]}
+            letter={key} 
+            key_status={get_key_status(key)}
           />
         ))}
       </div>
@@ -106,7 +117,7 @@ const Keyboard = () => {
       <div className="keyboard-row">
         {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
           <Key shouldShow={
-            pressedKeys[key as keyof typeof pressedKeys] || lastKeys.includes(key)
+            pressedKeys[key as keyof typeof pressedKeys]
           } letter={key} 
           key_status={get_key_status(key)}
           />

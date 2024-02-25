@@ -200,15 +200,15 @@ svg.cursor-pointer:hover {
 }
 
 .public-key-container {
-  background-color: #f0f0f0; /* Light gray background */
   padding: 10px; /* Some padding around the content */
   margin-top: 20px; /* Space above the container */
   border-radius: 5px; /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  flex-direction: column;
 }
 
 .public-key-display p {
-  margin: 0; /* Remove default margin */
   color: #333; /* Dark text color for contrast */
   font-size: 16px; /* Readable text size */
+  text-align: center;
+  display: flex;
 }
