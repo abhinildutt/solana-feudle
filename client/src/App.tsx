@@ -378,6 +378,7 @@ function App() {
 
     }
   }, [gameState])
+  
 
   return (
     <div className="h-screen flex flex-col">
